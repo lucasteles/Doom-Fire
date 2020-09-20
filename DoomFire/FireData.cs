@@ -8,7 +8,8 @@ namespace DoomFire
         public int Rows { get; }
         public int[] Data { get; }
         public FireWind Wind { get; private set; } = FireWind.Left;
-        Random random = new Random();
+
+        readonly Random random = new Random();
 
         public FireData(int cols, int rows)
         {
@@ -40,7 +41,7 @@ namespace DoomFire
                 }
         }
 
-        private void updateFire(int currentPixelIndex)
+        void updateFire(int currentPixelIndex)
         {
             var belowPixelIndex = currentPixelIndex + Cols;
 

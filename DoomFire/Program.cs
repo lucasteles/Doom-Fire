@@ -8,12 +8,9 @@ namespace DoomFire
         [STAThread]
         static void Main()
         {
-
-            var fire = new FireData(60, 40);
-
-            using (var x = new GLWindow(800, 600, fire))
-                x.Run(30);
-
+            var fire = new FireData(320, 168);
+            using var x = new GLWindow(1024, 768, fire);
+            x.Run(30);
         }
     }
 }
