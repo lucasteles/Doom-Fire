@@ -9,7 +9,7 @@ namespace DoomFire
         static void Main()
         {
             var fire = new FireData(320, 168);
-            using var x = new GLWindow(1024, 768, fire);
+            using var x = new GLWindow(1280, 672, fire);
             x.Run(30);
         }
     }

@@ -2,6 +2,7 @@
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
 using System;
+using static System.Math;
 
 namespace DoomFire
 {
@@ -18,8 +19,8 @@ namespace DoomFire
 
             Title = "Doom Fire";
             this.fireData = fireData;
-            sizeW = (int)Math.Ceiling((double)Width / fireData.Cols);
-            sizeH = (int)Math.Ceiling((double)Height / fireData.Rows);
+            sizeW = Max((int)Ceiling((double)Width / fireData.Cols), 1);
+            sizeH = Max((int)Ceiling((double)Height / fireData.Rows), 1);
 
         }
 
@@ -28,7 +29,7 @@ namespace DoomFire
             GL.Clear(ClearBufferMask.ColorBufferBit);
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
-            GL.Ortho(0.0, Width, 0.0, Height, -2.0, 2.0);
+            GL.Ortho(0.0, Width, 0.0, Height, -1.0, 1.0);
             base.OnLoad(e);
         }
         protected override void OnUpdateFrame(FrameEventArgs e)
@@ -61,9 +62,8 @@ namespace DoomFire
             for (var i = 0; i < fireData.Rows; i++)
                 for (var j = 0; j < fireData.Cols; j++)
                 {
-                    var colorIndex = fireData.Data[i * fireData.Cols + j];
+                    var colorIndex = fireData[i, j];
                     var color = ColorPalete.Colors[colorIndex];
-
                     DrawBlock(j * sizeW, i * sizeH, color);
                 }
         }

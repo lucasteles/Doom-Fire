@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 
 namespace DoomFire
 {
@@ -6,16 +7,19 @@ namespace DoomFire
     {
         public int Cols { get; }
         public int Rows { get; }
-        public int[] Data { get; }
-        public FireWind Wind { get; private set; } = FireWind.Left;
+
+        readonly int[] data;
+        public FireWind Wind { get; private set; } = FireWind.None;
 
         readonly Random random = new Random();
+
+        public int this[int x, int y] => data[x * Cols + y];
 
         public FireData(int cols, int rows)
         {
             Cols = cols;
             Rows = rows;
-            Data = new int[Rows * Cols];
+            data = new int[Rows * Cols];
 
             defineBaseState();
         }
@@ -27,7 +31,7 @@ namespace DoomFire
             {
                 var overflowPixelIndex = Cols * Rows;
                 var pixelIndex = (overflowPixelIndex - Cols) + j;
-                Data[pixelIndex] = max;
+                data[pixelIndex] = max;
             }
         }
 
@@ -48,26 +52,26 @@ namespace DoomFire
             if (belowPixelIndex >= Cols * Rows)
                 return;
 
-            var decay = random.Next(3);
+            var decay = random.Next(3 + 1);
 
             if (currentPixelIndex - decay < 0)
                 return;
 
-
-            var belowPixelFireIntensity = Data[belowPixelIndex];
-            var newFireIntensity =
-              belowPixelFireIntensity - decay >= 0 ? belowPixelFireIntensity - decay : 0;
+            var belowPixelFireIntensity = data[belowPixelIndex];
+            var tempIntensity = belowPixelFireIntensity - (decay & 1);
+            var newFireIntensity = tempIntensity >= 0 ? tempIntensity : 0;
 
             switch (Wind)
             {
                 case FireWind.None:
-                    Data[currentPixelIndex] = newFireIntensity;
+                    var rndNeg = (decay & 1) == 0 ? -decay : decay;
+                    data[currentPixelIndex + rndNeg ] = newFireIntensity;
                     break;
                 case FireWind.Left:
-                    Data[currentPixelIndex - decay] = newFireIntensity;
+                    data[currentPixelIndex - decay] = newFireIntensity;
                     break;
                 case FireWind.Right:
-                    Data[currentPixelIndex + decay] = newFireIntensity;
+                    data[currentPixelIndex + decay] = newFireIntensity;
                     break;
                 default:
                     break;
