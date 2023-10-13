@@ -1,10 +1,10 @@
-﻿using OpenTK;
+﻿using Microsoft.Xna.Framework;
 
 namespace DoomFire;
 
 public static class ColorPalete
 {
-    static Color Rgb(int r, int g, int b) => Color.FromArgb(1, r, g, b);
+    static Color Rgb(int r, int g, int b) => new(r, g, b, byte.MaxValue);
 
     public static readonly Color[] Colors =
     {
@@ -44,6 +44,6 @@ public static class ColorPalete
         Rgb(207, 207, 111),
         Rgb(223, 223, 159),
         Rgb(239, 239, 199),
-        Rgb(255, 255, 255)
+        Rgb(255, 255, 255),
     };
 }
